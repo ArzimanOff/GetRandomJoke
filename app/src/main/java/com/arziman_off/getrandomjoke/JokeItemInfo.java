@@ -1,5 +1,7 @@
 package com.arziman_off.getrandomjoke;
 
+import androidx.annotation.NonNull;
+
 public class JokeItemInfo {
     private String type;
     private String setup;
@@ -27,5 +29,16 @@ public class JokeItemInfo {
 
     public Integer getId() {
         return id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "JokeItemInfo{" +
+                "type='" + type + '\'' +
+                ", setup='" + setup + '\'' +
+                ", punchline='" + punchline + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
