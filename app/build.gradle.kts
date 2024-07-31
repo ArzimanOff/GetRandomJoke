@@ -1,3 +1,5 @@
+import com.android.aaptcompiler.android.isTruthy
+
 plugins {
     alias(libs.plugins.androidApplication)
 }
@@ -32,11 +34,13 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.rxandroid)
+    implementation(libs.rxjava)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
