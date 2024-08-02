@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Get Random Joke</string>
+    <string name="btnNewGenerateText">Сгенерировать</string>
 </resources>
