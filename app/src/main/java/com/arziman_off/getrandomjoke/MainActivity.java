@@ -2,8 +2,10 @@ package com.arziman_off.getrandomjoke;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -24,12 +26,39 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.loadOneNewJoke();
+        viewModel.getIsLoadingError().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoadingError) {
+                if (isLoadingError){
+                    Toast toast = Toast.makeText(
+                            MainActivity.this,
+                            R.string.internet_error_toast_text,
+                            Toast.LENGTH_SHORT
+                    );
+                    toast.setGravity(
+                            Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL,
+                            0,
+                            700
+                    );
+                    toast.show();
+                }
+            }
+        });
         viewModel.getJokeItem().observe(this, new Observer<JokeItemInfo>() {
             @Override
             public void onChanged(JokeItemInfo jokeItem) {
                 tvOneJokeSetup.setText(jokeItem.getSetup());
                 tvOneJokePunchline.setText(jokeItem.getPunchline());
                 Log.d(LOG_TAG, jokeItem.toString());
+            }
+        });
+        viewModel.getIsNowLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isNowLoading) {
+                if (isNowLoading) {
+                    tvOneJokeSetup.setText(R.string.loadingErrorHintText1);
+                    tvOneJokePunchline.setText(R.string.loadingErrorHintText2);
+                }
             }
         });
         btnNewGenerate.setOnClickListener(new View.OnClickListener() {

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Get Random Joke</string>
     <string name="btnNewGenerateText">Сгенерировать</string>
+    <string name="loadingErrorHintText1">Загрузка…</string>
+    <string name="loadingErrorHintText2">Пожалуйста подождите</string>
+    <string name="internet_error_toast_text">Ошибка загрузки! \nПроверьте подключение к интернету!</string>
 </resources>

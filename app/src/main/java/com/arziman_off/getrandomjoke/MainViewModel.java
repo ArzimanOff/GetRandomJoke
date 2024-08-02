@@ -21,6 +21,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -32,6 +33,8 @@ public class MainViewModel extends AndroidViewModel{
     private static final String KEY_PUNCHLINE = "punchline";
     private static final String KEY_ID = "id";
     private MutableLiveData<JokeItemInfo> jokeItem = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isNowLoading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoadingError = new MutableLiveData<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public MainViewModel(@NonNull Application application) {
@@ -42,10 +45,37 @@ public class MainViewModel extends AndroidViewModel{
         return jokeItem;
     }
 
+    public LiveData<Boolean> getIsNowLoading() {
+        return isNowLoading;
+    }
+
+    public LiveData<Boolean> getIsLoadingError() {
+        return isLoadingError;
+    }
+
     public void loadOneNewJoke(){
         Disposable disposable = loadOneNewJokeRx()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Throwable {
+                        isLoadingError.setValue(false);
+                        isNowLoading.setValue(true);
+                    }
+                })
+                .doAfterTerminate(new Action() {
+                    @Override
+                    public void run() throws Throwable {
+                        isNowLoading.setValue(false);
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Throwable {
+                        isLoadingError.setValue(true);
+                    }
+                })
                 .subscribe(
                         new Consumer<JokeItemInfo>() {
                             @Override
