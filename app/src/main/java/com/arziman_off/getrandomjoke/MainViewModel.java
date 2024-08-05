@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -88,12 +89,38 @@ public class MainViewModel extends AndroidViewModel{
         compositeDisposable.add(disposable);
     }
 
+    private void loadListOfJokes(){
+        Disposable disposable = loadNewJokesListRx()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Consumer<List<JokeItemInfo>>() {
+                            @Override
+                            public void accept(List<JokeItemInfo> jokeItemsList) throws Throwable {
+
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Throwable {
+                                Log.d(LOG_TAG, "Error " + throwable.getMessage());
+                            }
+                        }
+                );
+
+    }
+
     private Single<JokeItemInfo> loadOneNewJokeRx(){
         return ApiFactory
                 .getApiService()
                 .generateOneNewJoke();
     }
 
+    private Single<List<JokeItemInfo>> loadNewJokesListRx(){
+        return ApiFactory
+                .getApiService()
+                .generateNewJokesList();
+    }
     @Override
     protected void onCleared() {
         super.onCleared();

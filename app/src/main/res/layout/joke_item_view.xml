@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llJokeItemView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/joke_item_view_bg"
+    >
+
+    <TextView
+        android:id="@+id/tvJokeTypeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="12dp"
+        android:paddingStart="4dp"
+        android:paddingVertical="2dp"
+
+
+        android:text="general"
+        android:textColor="@color/main_color"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        android:textStyle="normal"
+
+        android:background="@drawable/joke_item_type_text_view_bg"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvJokeSetup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="4dp"
+
+        android:text="Hello World!"
+        android:textColor="@color/text_main_color_dark"
+        android:textAlignment="viewStart"
+        android:textSize="24sp"
+        android:textStyle="bold"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText"
+        />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="50dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/separator_color"
+        android:layout_marginHorizontal="16dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvJokeSetup"
+
+        />
+
+    <TextView
+        android:id="@+id/tvJokePunchline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="4dp"
+
+        android:text="Hello World!"
+        android:textColor="@color/text_main_color_dark"
+        android:textAlignment="viewStart"
+        android:textSize="18sp"
+        android:textStyle="normal"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator"
+        />
+    <TextView
+        android:id="@+id/tvJokeIdText"
+        android:layout_width="wrap_content"
+        android:minWidth="55dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="6dp"
+        android:paddingBottom="3dp"
+        android:paddingTop="1dp"
+
+
+        android:text="id: 0"
+        android:textColor="@color/main_color"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        android:textStyle="normal"
+
+        android:background="@drawable/joke_item_id_text_view_bg"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvJokePunchline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
