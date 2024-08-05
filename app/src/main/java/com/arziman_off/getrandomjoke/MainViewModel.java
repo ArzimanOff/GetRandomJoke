@@ -26,12 +26,7 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainViewModel extends AndroidViewModel{
-    private static final String BASE_URL = "https://official-joke-api.appspot.com/jokes/random";
     private static final String LOG_TAG = "MainViewModel";
-    private static final String KEY_TYPE = "type";
-    private static final String KEY_SETUP = "setup";
-    private static final String KEY_PUNCHLINE = "punchline";
-    private static final String KEY_ID = "id";
     private MutableLiveData<JokeItemInfo> jokeItem = new MutableLiveData<>();
     private MutableLiveData<Boolean> isNowLoading = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoadingError = new MutableLiveData<>();
@@ -94,36 +89,9 @@ public class MainViewModel extends AndroidViewModel{
     }
 
     private Single<JokeItemInfo> loadOneNewJokeRx(){
-        return Single.fromCallable(new Callable<JokeItemInfo>() {
-            @Override
-            public JokeItemInfo call() throws Exception {
-                URL url = new URL(BASE_URL);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = urlConnection.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder data = new StringBuilder();
-                String result;
-                do {
-                    result = bufferedReader.readLine();
-                    if (result != null){
-                        data.append(result);
-                    }
-                } while (result != null);
-
-                JSONObject jsonObject = new JSONObject(data.toString());
-                String jokeType = jsonObject.getString(KEY_TYPE);
-                String jokeSetup =  jsonObject.getString(KEY_SETUP);
-                String jokePunchline = jsonObject.getString(KEY_PUNCHLINE);
-                Integer jokeId = jsonObject.getInt(KEY_ID);
-                return new JokeItemInfo(
-                        jokeType,
-                        jokeSetup,
-                        jokePunchline,
-                        jokeId
-                );
-            }
-        });
+        return ApiFactory
+                .getApiService()
+                .generateOneNewJoke();
     }
 
     @Override
