@@ -98,6 +98,25 @@ public class MainViewModel extends AndroidViewModel{
         Disposable disposable = loadNewJokesListRx()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Throwable {
+                        isLoadingError.setValue(false);
+                        isNowLoading.setValue(true);
+                    }
+                })
+                .doAfterTerminate(new Action() {
+                    @Override
+                    public void run() throws Throwable {
+                        isNowLoading.setValue(false);
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Throwable {
+                        isLoadingError.setValue(true);
+                    }
+                })
                 .subscribe(
                         new Consumer<List<JokeItemInfo>>() {
                             @Override

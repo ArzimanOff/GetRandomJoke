@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,16 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    //---------------------------------
+    private ScrollView svJokesListBox;
+    private LinearLayout llOneJokeBox;
     private LinearLayout jokesList;
-    private ArrayList<JokeItemInfo> jokes = new ArrayList<>();
-    //---------------------------------
+    private LinearLayout loadingProgressBarBox;
     private static final String LOG_TAG = "MainActivity";
     private MainViewModel viewModel;
     private MaterialButton btnNewGenerate;
+    private TextView tvJokeTypeText;
     private TextView tvOneJokeSetup;
     private TextView tvOneJokePunchline;
+    private TextView tvJokeIdText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,17 +37,18 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-
-        //viewModel.loadOneNewJoke();
+        viewModel.loadOneNewJoke();
+        //        viewModel.loadListOfJokes();
         viewModel.getJokeItem().observe(this, new Observer<JokeItemInfo>() {
             @Override
             public void onChanged(JokeItemInfo jokeItem) {
-                //TODO
                 Log.d(LOG_TAG, jokeItem.toString());
+                tvJokeTypeText.setText(jokeItem.getType());
+                tvOneJokeSetup.setText(jokeItem.getSetup());
+                tvOneJokePunchline.setText(jokeItem.getPunchline());
+                tvJokeIdText.setText(jokeItem.getId().toString());
             }
         });
-
-        viewModel.loadListOfJokes();
         viewModel.getJokeItemsList().observe(this, new Observer<List<JokeItemInfo>>() {
             @Override
             public void onChanged(List<JokeItemInfo> jokeItemsList) {
@@ -75,7 +78,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean isNowLoading) {
                 if (isNowLoading) {
-                    //TODO
+                    loadingProgressBarBox.setVisibility(View.VISIBLE);
+                    svJokesListBox.setVisibility(View.GONE);
+                    llOneJokeBox.setVisibility(View.GONE);
+                } else {
+                    loadingProgressBarBox.setVisibility(View.GONE);
+                    llOneJokeBox.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -88,12 +96,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        //---------------------------------
+        loadingProgressBarBox = findViewById(R.id.loadingProgressBarBox);
+
+        svJokesListBox = findViewById(R.id.svJokesListBox);
+        llOneJokeBox = findViewById(R.id.llOneJokeBox);
         jokesList = findViewById(R.id.jokesList);
-        //---------------------------------
+
         btnNewGenerate = findViewById(R.id.btnNewGenerate);
-//        tvOneJokeSetup = findViewById(R.id.tvJokeSetup);
-//        tvOneJokePunchline = findViewById(R.id.tvJokePunchline);
+
+        tvJokeTypeText = findViewById(R.id.tvJokeTypeText);
+        tvOneJokeSetup = findViewById(R.id.tvJokeSetup);
+        tvOneJokePunchline = findViewById(R.id.tvJokePunchline);
+        tvJokeIdText = findViewById(R.id.tvJokeIdText);
     }
 
     private void showJokes(List<JokeItemInfo> jokes){
