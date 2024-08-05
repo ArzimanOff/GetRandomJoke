@@ -4,11 +4,11 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface ApiService {
-    int jokesCnt = 15;
     @GET("random_joke")
     Single<JokeItemInfo> generateOneNewJoke();
-    @GET("jokes/random/" + jokesCnt)
-    Single<List<JokeItemInfo>> generateNewJokesList();
+    @GET("jokes/random/{count}")
+    Single<List<JokeItemInfo>> generateNewJokesList(@Path("count") int jokesCnt);
 }

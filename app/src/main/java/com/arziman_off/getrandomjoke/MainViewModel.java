@@ -145,7 +145,7 @@ public class MainViewModel extends AndroidViewModel{
     private Single<List<JokeItemInfo>> loadNewJokesListRx(){
         return ApiFactory
                 .getApiService()
-                .generateNewJokesList();
+                .generateNewJokesList(MainActivity.needJokesCnt);
     }
     @Override
     protected void onCleared() {
