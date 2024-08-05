@@ -29,6 +29,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MainViewModel extends AndroidViewModel{
     private static final String LOG_TAG = "MainViewModel";
     private MutableLiveData<JokeItemInfo> jokeItem = new MutableLiveData<>();
+    private MutableLiveData<List<JokeItemInfo>> jokeItemsList = new MutableLiveData<>();
     private MutableLiveData<Boolean> isNowLoading = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoadingError = new MutableLiveData<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -39,6 +40,10 @@ public class MainViewModel extends AndroidViewModel{
 
     public LiveData<JokeItemInfo> getJokeItem() {
         return jokeItem;
+    }
+
+    public LiveData<List<JokeItemInfo>> getJokeItemsList() {
+        return jokeItemsList;
     }
 
     public LiveData<Boolean> getIsNowLoading() {
@@ -89,15 +94,15 @@ public class MainViewModel extends AndroidViewModel{
         compositeDisposable.add(disposable);
     }
 
-    private void loadListOfJokes(){
+    public void loadListOfJokes(){
         Disposable disposable = loadNewJokesListRx()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         new Consumer<List<JokeItemInfo>>() {
                             @Override
-                            public void accept(List<JokeItemInfo> jokeItemsList) throws Throwable {
-
+                            public void accept(List<JokeItemInfo> jokeItems) throws Throwable {
+                                jokeItemsList.setValue(jokeItems);
                             }
                         },
                         new Consumer<Throwable>() {
@@ -107,7 +112,9 @@ public class MainViewModel extends AndroidViewModel{
                             }
                         }
                 );
-
+        // для методов loadOneNewJoke и loadListOfJokes
+        // возможно в будущем надо будет добавлять в разные compositeDisposable
+        compositeDisposable.add(disposable);
     }
 
     private Single<JokeItemInfo> loadOneNewJokeRx(){

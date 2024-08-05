@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,10 +34,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        //---------------------------------
-        generateJokes(2);
-        showJokes();
-        //---------------------------------
+
+
+        //viewModel.loadOneNewJoke();
+        viewModel.getJokeItem().observe(this, new Observer<JokeItemInfo>() {
+            @Override
+            public void onChanged(JokeItemInfo jokeItem) {
+                //TODO
+                Log.d(LOG_TAG, jokeItem.toString());
+            }
+        });
+
+        viewModel.loadListOfJokes();
+        viewModel.getJokeItemsList().observe(this, new Observer<List<JokeItemInfo>>() {
+            @Override
+            public void onChanged(List<JokeItemInfo> jokeItemsList) {
+                showJokes(jokeItemsList);
+            }
+        });
+
         viewModel.getIsLoadingError().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isLoadingError) {
@@ -80,22 +96,7 @@ public class MainActivity extends AppCompatActivity {
 //        tvOneJokePunchline = findViewById(R.id.tvJokePunchline);
     }
 
-    //---------------------------------
-    private void generateJokes(int n){
-        for (int i = 0; i < n; i++){
-            viewModel.loadOneNewJoke();
-            viewModel.getJokeItem().observe(this, new Observer<JokeItemInfo>() {
-                @Override
-                public void onChanged(JokeItemInfo jokeItem) {
-                    jokes.add(jokeItem);
-                    Log.d("checkCheck", String.valueOf(jokes.size()));
-                    Log.d(LOG_TAG, jokeItem.toString());
-                }
-            });
-        }
-    }
-
-    private void showJokes(){
+    private void showJokes(List<JokeItemInfo> jokes){
         for (JokeItemInfo jokeItem : jokes) {
             Log.d("checkCheck", jokeItem.toString());
             View jokeView = getLayoutInflater()
@@ -116,7 +117,4 @@ public class MainActivity extends AppCompatActivity {
             jokesList.addView(jokeView);
         }
     }
-
-    //---------------------------------
-
 }
