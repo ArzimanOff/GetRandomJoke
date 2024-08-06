@@ -78,6 +78,7 @@ public class MainViewModel extends AndroidViewModel{
                         isLoadingError.setValue(true);
                     }
                 })
+                .retry(3)
                 .subscribe(
                         new Consumer<JokeItemInfo>() {
                             @Override

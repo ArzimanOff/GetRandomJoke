@@ -4,4 +4,7 @@
     <string name="loadingErrorHintText1">Загрузка…</string>
     <string name="loadingErrorHintText2">Пожалуйста подождите</string>
     <string name="internet_error_toast_text">Ошибка загрузки! \nПроверьте подключение к интернету!</string>
+    <string name="change_generate_rules_button_text">change generate rules button</string>
+    <string name="loadingProgressBarText1">Загрузка...</string>
+    <string name="loadingProgressBarText2">Пожалуйста, подождите :)</string>
 </resources>

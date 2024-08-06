@@ -4,10 +4,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,10 +21,10 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout loadingProgressBarBox;
     private MainViewModel viewModel;
     private MaterialButton btnNewGenerate;
-    private ImageButton btnChangeGenerateRules;
+    private View btnChangeGenerateRules;
     private TextView tvJokeTypeText;
     private TextView tvOneJokeSetup;
     private TextView tvOneJokePunchline;
@@ -46,12 +46,13 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton rbListOfJokes;
     private TextView tvNeedJokesCntInputTitle;
     private EditText etNeedJokesCntInput;
+    private LinearLayout clownView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initViews();
+        initMainViews();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         if (needJokesCnt == 1) {
             viewModel.loadOneNewJoke();
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 tvJokeTypeText.setText(jokeItem.getType());
                 tvOneJokeSetup.setText(jokeItem.getSetup());
                 tvOneJokePunchline.setText(jokeItem.getPunchline());
-                tvJokeIdText.setText(jokeItem.getId().toString());
+                tvJokeIdText.setText("id: " + jokeItem.getId().toString());
 
                 svJokesListBox.setVisibility(View.GONE);
                 llOneJokeBox.setVisibility(View.VISIBLE);
@@ -120,11 +121,25 @@ public class MainActivity extends AppCompatActivity {
         btnNewGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //clownView = findViewById(R.id.clownView);
                 if (needJokesCnt == 1) {
+                    //clownView.setVisibility(View.GONE);
                     viewModel.loadOneNewJoke();
                 } else if (needJokesCnt > 1) {
+//                    clownView.setVisibility(View.GONE);
                     jokesList.removeAllViews();
                     viewModel.loadListOfJokes(needJokesCnt);
+                } else {
+//                    ImageView imageViewGif = findViewById(R.id.clownViewImage);
+//
+//                    Glide.with(getApplicationContext())
+//                            .asGif()
+//                            .load(R.drawable.monke_clown)
+//                            .into(imageViewGif);
+//                    clownView.setVisibility(View.VISIBLE);
+//
+//                    llOneJokeBox.setVisibility(View.GONE);
+//                    svJokesListBox.setVisibility(View.GONE);
                 }
             }
         });
@@ -141,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
         if (rbOneJoke.isChecked()) {
             needJokesCnt = 1;
         } else {
-            if (etNeedJokesCntInput != null &&
-                    !etNeedJokesCntInput.getText().toString().trim().isEmpty()
+            if (etNeedJokesCntInput != null && !etNeedJokesCntInput.getText().toString().trim().isEmpty()
             ){
                 needJokesCnt = Integer.parseInt(etNeedJokesCntInput.getText().toString());
             }
@@ -192,18 +206,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
-        builder.setView(changeGenerateRulesDialog)
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        checkNeedJokesCnt();
-                    }
-                });
-
-        builder.create().show();
+        builder
+                .setView(changeGenerateRulesDialog)
+                .setOnDismissListener(dialog -> checkNeedJokesCnt())
+                .create()
+                .show();
     }
 
-    private void initViews() {
+    private void initMainViews() {
         loadingProgressBarBox = findViewById(R.id.loadingProgressBarBox);
 
         svJokesListBox = findViewById(R.id.svJokesListBox);
@@ -221,23 +231,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void showJokes(List<JokeItemInfo> jokes) {
         for (JokeItemInfo jokeItem : jokes) {
-            Log.d("checkCheck", jokeItem.toString());
+            Log.d(LOG_TAG, jokeItem.toString());
             View jokeView = getLayoutInflater()
                     .inflate(
                             R.layout.joke_item_view,
                             jokesList,
                             false
                     );
-            TextView tvJokeType = jokeView.findViewById(R.id.tvJokeTypeText);
-            TextView tvJokeSetup = jokeView.findViewById(R.id.tvJokeSetup);
-            TextView tvJokePunchline = jokeView.findViewById(R.id.tvJokePunchline);
-            TextView tvJokeId = jokeView.findViewById(R.id.tvJokeIdText);
-
-            tvJokeType.setText(jokeItem.getType());
-            tvJokeSetup.setText(jokeItem.getSetup());
-            tvJokePunchline.setText(jokeItem.getPunchline());
-            tvJokeId.setText("id: " + jokeItem.getId().toString());
+            initJokeViewItems(jokeView, jokeItem);
             jokesList.addView(jokeView);
         }
+    }
+
+    private void initJokeViewItems(View jokeView, JokeItemInfo jokeItem) {
+        TextView tvJokeType = jokeView.findViewById(R.id.tvJokeTypeText);
+        TextView tvJokeSetup = jokeView.findViewById(R.id.tvJokeSetup);
+        TextView tvJokePunchline = jokeView.findViewById(R.id.tvJokePunchline);
+        TextView tvJokeId = jokeView.findViewById(R.id.tvJokeIdText);
+        tvJokeType.setText(jokeItem.getType());
+        tvJokeSetup.setText(jokeItem.getSetup());
+        tvJokePunchline.setText(jokeItem.getPunchline());
+        tvJokeId.setText("id: " + jokeItem.getId().toString());
     }
 }
