@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -43,16 +44,19 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup rgChooseJokesCnt;
     private RadioButton rbOneJoke;
     private RadioButton rbListOfJokes;
+    private TextView tvNeedJokesCntInputTitle;
+    private EditText etNeedJokesCntInput;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        if (needJokesCnt == 1){
+        if (needJokesCnt == 1) {
             viewModel.loadOneNewJoke();
-        } else if (needJokesCnt > 1){
-            viewModel.loadListOfJokes();
+        } else if (needJokesCnt > 1) {
+            viewModel.loadListOfJokes(needJokesCnt);
         }
         viewModel.getJokeItem().observe(this, new Observer<JokeItemInfo>() {
             @Override
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 tvOneJokeSetup.setText(jokeItem.getSetup());
                 tvOneJokePunchline.setText(jokeItem.getPunchline());
                 tvJokeIdText.setText(jokeItem.getId().toString());
+
                 svJokesListBox.setVisibility(View.GONE);
                 llOneJokeBox.setVisibility(View.VISIBLE);
             }
@@ -72,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 showJokes(jokeItemsList);
             }
         });
-
         viewModel.getIsLoadingError().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isLoadingError) {
-                if (isLoadingError){
+                if (isLoadingError) {
+                    loadingProgressBarBox.setVisibility(View.VISIBLE);
                     Toast toast = Toast.makeText(
                             MainActivity.this,
                             R.string.internet_error_toast_text,
@@ -88,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
                             700
                     );
                     toast.show();
+                } else {
+                    loadingProgressBarBox.setVisibility(View.GONE);
                 }
             }
         });
@@ -100,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
                     llOneJokeBox.setVisibility(View.GONE);
                 } else {
                     loadingProgressBarBox.setVisibility(View.GONE);
-                    if (needJokesCnt == 1){
+                    if (needJokesCnt == 1) {
                         llOneJokeBox.setVisibility(View.VISIBLE);
                         svJokesListBox.setVisibility(View.GONE);
-                    } else if (needJokesCnt > 1){
+                    } else if (needJokesCnt > 1) {
                         llOneJokeBox.setVisibility(View.GONE);
                         svJokesListBox.setVisibility(View.VISIBLE);
                     }
@@ -113,10 +120,11 @@ public class MainActivity extends AppCompatActivity {
         btnNewGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (needJokesCnt == 1){
+                if (needJokesCnt == 1) {
                     viewModel.loadOneNewJoke();
-                } else if (needJokesCnt > 1){
-                    viewModel.loadListOfJokes();
+                } else if (needJokesCnt > 1) {
+                    jokesList.removeAllViews();
+                    viewModel.loadListOfJokes(needJokesCnt);
                 }
             }
         });
@@ -126,18 +134,22 @@ public class MainActivity extends AppCompatActivity {
                 showChangeGenerateRulesDialog();
                 checkNeedJokesCnt();
             }
-
         });
     }
+
     private void checkNeedJokesCnt() {
-        if (rbOneJoke.isChecked()){
+        if (rbOneJoke.isChecked()) {
             needJokesCnt = 1;
         } else {
-            needJokesCnt = 20;
+            if (etNeedJokesCntInput != null &&
+                    !etNeedJokesCntInput.getText().toString().trim().isEmpty()
+            ){
+                needJokesCnt = Integer.parseInt(etNeedJokesCntInput.getText().toString());
+            }
         }
     }
 
-    private void showChangeGenerateRulesDialog(){
+    private void showChangeGenerateRulesDialog() {
         int active_rb_color = ContextCompat.getColor(this, R.color.main_color);
         int inactive_rb_color = ContextCompat.getColor(this, R.color.inactive_rb_color);
         View changeGenerateRulesDialog = getLayoutInflater()
@@ -148,38 +160,45 @@ public class MainActivity extends AppCompatActivity {
         rgChooseJokesCnt = changeGenerateRulesDialog.findViewById(R.id.rgChooseJokesCnt);
         rbOneJoke = changeGenerateRulesDialog.findViewById(R.id.rbOneJoke);
         rbListOfJokes = changeGenerateRulesDialog.findViewById(R.id.rbListOfJokes);
+        tvNeedJokesCntInputTitle = changeGenerateRulesDialog.findViewById(R.id.tvNeedJokesCntInputTitle);
+        etNeedJokesCntInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokesCntInput);
         rgChooseJokesCnt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                checkNeedJokesCnt();
-                if (rbOneJoke.isChecked()){
+                if (rbOneJoke.isChecked()) {
                     // активируем нужные стили для текущего радиобокса
                     rbOneJoke.setBackgroundResource(R.drawable.active_rb_bg);
                     rbOneJoke.setTextColor(active_rb_color);
-
                     // деактивируем нужные стили для остальных радиобоксов
                     rbListOfJokes.setBackgroundResource(R.drawable.inactive_rb_bg);
                     rbListOfJokes.setTextColor(inactive_rb_color);
+
+                    // убираем поле ввода кол-ва шуток
+                    tvNeedJokesCntInputTitle.setVisibility(View.GONE);
+                    etNeedJokesCntInput.setVisibility(View.GONE);
                 } else {
                     // активируем нужные стили для текущего радиобокса
                     rbListOfJokes.setBackgroundResource(R.drawable.active_rb_bg);
                     rbListOfJokes.setTextColor(active_rb_color);
-
                     // деактивируем нужные стили для остальных радиобоксов
                     rbOneJoke.setBackgroundResource(R.drawable.inactive_rb_bg);
                     rbOneJoke.setTextColor(inactive_rb_color);
+
+                    // показываем поле ввода кол-ва шуток
+                    tvNeedJokesCntInputTitle.setVisibility(View.VISIBLE);
+                    etNeedJokesCntInput.setVisibility(View.VISIBLE);
                 }
             }
         });
 
         AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
         builder.setView(changeGenerateRulesDialog)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onDismiss(DialogInterface dialog) {
+                        checkNeedJokesCnt();
                     }
-                })
-                .setNegativeButton("Отмена", null);
+                });
 
         builder.create().show();
     }
@@ -200,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         tvJokeIdText = findViewById(R.id.tvJokeIdText);
     }
 
-    private void showJokes(List<JokeItemInfo> jokes){
+    private void showJokes(List<JokeItemInfo> jokes) {
         for (JokeItemInfo jokeItem : jokes) {
             Log.d("checkCheck", jokeItem.toString());
             View jokeView = getLayoutInflater()
@@ -217,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             tvJokeType.setText(jokeItem.getType());
             tvJokeSetup.setText(jokeItem.getSetup());
             tvJokePunchline.setText(jokeItem.getPunchline());
-            tvJokeId.setText("id: "+ jokeItem.getId().toString());
+            tvJokeId.setText("id: " + jokeItem.getId().toString());
             jokesList.addView(jokeView);
         }
     }

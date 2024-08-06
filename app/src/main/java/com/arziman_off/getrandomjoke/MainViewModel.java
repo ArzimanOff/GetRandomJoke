@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -94,8 +95,8 @@ public class MainViewModel extends AndroidViewModel{
         compositeDisposable.add(disposable);
     }
 
-    public void loadListOfJokes(){
-        Disposable disposable = loadNewJokesListRx()
+    public void loadListOfJokes(int needJokesCnt){
+        Disposable disposable = loadNewJokesListRx(needJokesCnt)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -142,14 +143,14 @@ public class MainViewModel extends AndroidViewModel{
                 .generateOneNewJoke();
     }
 
-    private Single<List<JokeItemInfo>> loadNewJokesListRx(){
+    private Single<List<JokeItemInfo>> loadNewJokesListRx(int needJokesCnt){
         return ApiFactory
                 .getApiService()
-                .generateNewJokesList(MainActivity.needJokesCnt);
+                .generateNewJokesList(needJokesCnt);
     }
     @Override
     protected void onCleared() {
         super.onCleared();
-        compositeDisposable.dispose();
+        compositeDisposable.clear();
     }
 }
