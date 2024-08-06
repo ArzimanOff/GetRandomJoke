@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -47,12 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvNeedJokesCntInputTitle;
     private EditText etNeedJokesCntInput;
     private LinearLayout clownView;
+    private TextView changeGenerateRulesBtnIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initMainViews();
+        changeGenerateRulesBtnIndicator.setText(String.valueOf(needJokesCnt));
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         if (needJokesCnt == 1) {
             viewModel.loadOneNewJoke();
@@ -83,17 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean isLoadingError) {
                 if (isLoadingError) {
                     loadingProgressBarBox.setVisibility(View.VISIBLE);
-                    Toast toast = Toast.makeText(
-                            MainActivity.this,
-                            R.string.internet_error_toast_text,
-                            Toast.LENGTH_SHORT
-                    );
-                    toast.setGravity(
-                            Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL,
-                            0,
-                            700
-                    );
-                    toast.show();
+                    ApplicationSignals.loadingError(getApplicationContext());
                 } else {
                     loadingProgressBarBox.setVisibility(View.GONE);
                 }
@@ -121,25 +112,25 @@ public class MainActivity extends AppCompatActivity {
         btnNewGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //clownView = findViewById(R.id.clownView);
+                clownView = findViewById(R.id.clownView);
                 if (needJokesCnt == 1) {
-                    //clownView.setVisibility(View.GONE);
+                    clownView.setVisibility(View.GONE);
                     viewModel.loadOneNewJoke();
                 } else if (needJokesCnt > 1) {
-//                    clownView.setVisibility(View.GONE);
+                    clownView.setVisibility(View.GONE);
                     jokesList.removeAllViews();
                     viewModel.loadListOfJokes(needJokesCnt);
                 } else {
-//                    ImageView imageViewGif = findViewById(R.id.clownViewImage);
-//
-//                    Glide.with(getApplicationContext())
-//                            .asGif()
-//                            .load(R.drawable.monke_clown)
-//                            .into(imageViewGif);
-//                    clownView.setVisibility(View.VISIBLE);
-//
-//                    llOneJokeBox.setVisibility(View.GONE);
-//                    svJokesListBox.setVisibility(View.GONE);
+                    ImageView imageViewGif = findViewById(R.id.clownViewImage);
+
+                    Glide.with(getApplicationContext())
+                            .asGif()
+                            .load(R.drawable.monke_clown)
+                            .into(imageViewGif);
+                    clownView.setVisibility(View.VISIBLE);
+
+                    llOneJokeBox.setVisibility(View.GONE);
+                    svJokesListBox.setVisibility(View.GONE);
                 }
             }
         });
@@ -156,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
         if (rbOneJoke.isChecked()) {
             needJokesCnt = 1;
         } else {
-            if (etNeedJokesCntInput != null && !etNeedJokesCntInput.getText().toString().trim().isEmpty()
-            ){
+            if (etNeedJokesCntInput != null &&
+                    !etNeedJokesCntInput.getText().toString().trim().isEmpty()){
                 needJokesCnt = Integer.parseInt(etNeedJokesCntInput.getText().toString());
             }
         }
@@ -208,7 +199,13 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
         builder
                 .setView(changeGenerateRulesDialog)
-                .setOnDismissListener(dialog -> checkNeedJokesCnt())
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        checkNeedJokesCnt();
+                        changeGenerateRulesBtnIndicator.setText(String.valueOf(needJokesCnt));
+                    }
+                })
                 .create()
                 .show();
     }
@@ -227,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         tvOneJokeSetup = findViewById(R.id.tvJokeSetup);
         tvOneJokePunchline = findViewById(R.id.tvJokePunchline);
         tvJokeIdText = findViewById(R.id.tvJokeIdText);
+        changeGenerateRulesBtnIndicator = findViewById(R.id.changeGenerateRulesBtnIndicator);
     }
 
     private void showJokes(List<JokeItemInfo> jokes) {
