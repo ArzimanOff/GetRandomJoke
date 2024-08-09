@@ -7,7 +7,6 @@
     android:layout_marginBottom="16dp"
     android:background="@drawable/joke_item_view_bg"
     >
-
     <TextView
         android:id="@+id/tvJokeTypeText"
         android:layout_width="wrap_content"
@@ -28,53 +27,69 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
-
-    <TextView
-        android:id="@+id/tvJokeSetup"
+    <LinearLayout
+        android:id="@+id/llJokeItemContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="4dp"
-
-        android:text="Hello World!"
-        android:textColor="@color/text_main_color_dark"
-        android:textAlignment="viewStart"
-        android:textSize="24sp"
-        android:textStyle="bold"
-
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText"
-        />
+        app:layout_constraintBottom_toTopOf="@id/tvJokeIdText">
 
-    <View
-        android:id="@+id/separator"
-        android:layout_width="50dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="2dp"
-        android:background="@color/separator_color"
-        android:layout_marginHorizontal="16dp"
+        <LinearLayout
+            android:id="@+id/llJokeItemContentText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvJokeSetup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="4dp"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvJokeSetup"
+                android:text="Hello World!"
+                android:textColor="@color/text_main_color_dark"
+                android:textAlignment="viewStart"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                />
+            <View
+                android:id="@+id/separator"
+                android:layout_width="50dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/separator_color"
+                android:layout_marginHorizontal="16dp"
+                />
+            <TextView
+                android:id="@+id/tvJokePunchline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="4dp"
 
-        />
-
-    <TextView
-        android:id="@+id/tvJokePunchline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="4dp"
-
-        android:text="Hello World!"
-        android:textColor="@color/text_main_color_dark"
-        android:textAlignment="viewStart"
-        android:textSize="18sp"
-        android:textStyle="normal"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator"
-        />
+                android:text="Hello World!"
+                android:textColor="@color/text_main_color_dark"
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/jokeLikeBtn"
+            android:layout_width="wrap_content"
+            android:minWidth="60dp"
+            android:maxWidth="100dp"
+            android:layout_height="match_parent"
+            android:maxHeight="100dp"
+            android:contentDescription="@string/like_joke_button_text"
+            android:src="@drawable/inactive_like_icon"
+            android:padding="16dp"
+            />
+    </LinearLayout>
     <TextView
         android:id="@+id/tvJokeIdText"
         android:layout_width="wrap_content"
@@ -94,7 +109,7 @@
         android:background="@drawable/joke_item_id_text_view_bg"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvJokePunchline"
+        app:layout_constraintTop_toBottomOf="@id/llJokeItemContent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

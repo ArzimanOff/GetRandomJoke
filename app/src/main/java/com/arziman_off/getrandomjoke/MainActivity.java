@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
     private RecyclerView rvJokesListBox;
     private JokesAdapter jokesAdapter;
-    private LinearLayout llOneJokeBox;
+    private ConstraintLayout llOneJokeBox;
     private LinearLayout loadingProgressBarBox;
     private MainViewModel viewModel;
     private MaterialButton btnNewGenerate;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvOneJokeSetup;
     private TextView tvOneJokePunchline;
     private TextView tvJokeIdText;
+    private ImageView oneJokeLikeBtn;
     private RadioButton rbOneJoke;
     private RadioButton rbListOfJokes;
     private TextView tvNeedJokesCntInputTitle;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 tvOneJokeSetup.setText(jokeItem.getSetup());
                 tvOneJokePunchline.setText(jokeItem.getPunchline());
                 tvJokeIdText.setText("id: " + jokeItem.getId().toString());
+                oneJokeLikeBtn.setVisibility(View.VISIBLE);
 
                 rvJokesListBox.setVisibility(View.GONE);
                 llOneJokeBox.setVisibility(View.VISIBLE);
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<JokeItemInfo> jokeItemsList) {
                 showJokes(jokeItemsList);
+                jokesAdapter.notifyDataSetChanged();
             }
         });
         viewModel.getIsLoadingError().observe(this, new Observer<Boolean>() {
@@ -224,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
         tvOneJokeSetup = findViewById(R.id.tvJokeSetup);
         tvOneJokePunchline = findViewById(R.id.tvJokePunchline);
         tvJokeIdText = findViewById(R.id.tvJokeIdText);
+        oneJokeLikeBtn = findViewById(R.id.oneJokeLikeBtn);
+
         changeGenerateRulesBtnIndicator = findViewById(R.id.changeGenerateRulesBtnIndicator);
     }
 

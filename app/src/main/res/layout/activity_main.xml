@@ -7,13 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llOneJokeBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
 
-        android:paddingVertical="24dp"
         android:layout_marginHorizontal="24dp"
 
         android:background="@drawable/main_view_one_joke_bg"
@@ -23,7 +22,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
         <TextView
             android:id="@+id/tvJokeTypeText"
             android:layout_width="wrap_content"
@@ -31,6 +31,7 @@
             android:minWidth="55dp"
             android:paddingHorizontal="16dp"
             android:paddingVertical="4dp"
+            android:layout_marginTop="24dp"
 
             android:text=""
             android:textColor="@color/main_color"
@@ -40,6 +41,7 @@
 
             android:background="@drawable/main_view_one_joke_details_bg"
 
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -50,7 +52,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="4dp"
 
-            android:text="Ошибка загрузки!"
+            android:text="@string/one_joke_load_error_text"
             android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
             android:textSize="32sp"
@@ -68,6 +70,7 @@
             android:layout_marginHorizontal="16dp"
 
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvJokeSetup"
             />
         <TextView
@@ -75,9 +78,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="4dp"
+            android:layout_marginVertical="5dp"
 
-            android:text="Повторите позже"
+            android:text="@string/one_joke_try_load_later_text"
             android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
             android:textSize="24sp"
@@ -85,6 +88,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator"
+            app:layout_constraintBottom_toTopOf="@id/tvJokeIdText"
             />
         <TextView
             android:id="@+id/tvJokeIdText"
@@ -93,6 +97,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="4dp"
+            android:layout_marginBottom="24dp"
             android:text=""
             android:textColor="@color/main_color"
             android:textAlignment="center"
@@ -101,11 +106,26 @@
 
             android:background="@drawable/main_view_one_joke_details_bg"
 
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvJokePunchline"
             app:layout_constraintBottom_toBottomOf="parent"
             />
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/oneJokeLikeBtn"
+            android:layout_width="wrap_content"
+            android:minWidth="60dp"
+            android:maxWidth="100dp"
+            android:layout_height="match_parent"
+            android:maxHeight="100dp"
+            android:contentDescription="@string/like_joke_button_text"
+            android:src="@drawable/inactive_like_icon"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJokesListBox"
         android:layout_width="match_parent"
@@ -116,6 +136,8 @@
         app:layout_constraintRight_toRightOf="parent"
         android:padding="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:visibility="gone"
+        tools:listitem="@layout/joke_item_view"
         >
     </androidx.recyclerview.widget.RecyclerView>
     <LinearLayout
@@ -129,7 +151,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible"
+        tools:visibility="gone"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

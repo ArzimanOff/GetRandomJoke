@@ -7,4 +7,7 @@
     <string name="change_generate_rules_button_text">change generate rules button</string>
     <string name="loadingProgressBarText1">Загрузка...</string>
     <string name="loadingProgressBarText2">Пожалуйста, подождите :)</string>
+    <string name="like_joke_button_text">Like joke button</string>
+    <string name="one_joke_load_error_text">Ошибка загрузки!</string>
+    <string name="one_joke_try_load_later_text">Повторите позже</string>
 </resources>
