@@ -5,4 +5,17 @@
     <string name="internet_error_toast_text">Download error! \nCheck your internet connection!</string>
     <string name="loadingErrorHintText1">Loading…</string>
     <string name="loadingErrorHintText2">Please wait</string>
+    <string name="change_generate_rules_button_text">A button to change the rules for generating jokes</string>
+    <string name="loadingProgressBarText1">Loading...</string>
+    <string name="loadingProgressBarText2">Please wait :)</string>
+    <string name="like_joke_button_text">A button for liking a joke</string>
+    <string name="one_joke_load_error_text">Download error!</string>
+    <string name="one_joke_try_load_later_text">Repeat later</string>
+    <string name="clown_view_text_1">Seriously? \\n Do you want to generate 0 jokes?</string>
+    <string name="clown_view_text_2">The Clown of the Year Award \\n goes to you :)</string>
+    <string name="need_jokes_cnt_input_hint_text">Enter a number</string>
+    <string name="need_jokes_cnt_input_title_text">How much?</string>
+    <string name="rb_list_of_jokes_text">Several</string>
+    <string name="rb_one_joke_text">One</string>
+    <string name="rg_choose_jokes_cnt_title_text">How many jokes need to generate?</string>
 </resources>
