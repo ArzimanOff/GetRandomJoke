@@ -2,6 +2,7 @@ package com.arziman_off.getrandomjoke;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -27,10 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int RANDOM_JOKE = -1;
     private static final String LOG_TAG = "MainActivity";
-    public static int needJokesCnt = 1;
-    public static int needJokeId = RANDOM_JOKE;
+    private RulesForGeneratingJokes generatingRules = RulesForGeneratingJokes.getInstance();
     private RecyclerView rvJokesListBox;
     private JokesAdapter jokesAdapter;
     private ConstraintLayout llOneJokeBox;
@@ -61,18 +60,28 @@ public class MainActivity extends AppCompatActivity {
 
         jokesAdapter = new JokesAdapter();
         rvJokesListBox.setAdapter(jokesAdapter);
-
-        changeGenerateRulesBtnIndicator.setText(String.valueOf(needJokesCnt));
+        changeGenerateRulesBtnIndicator.setText(String.valueOf(generatingRules.getJokesCntValue()));
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        if (needJokesCnt == 1) {
-            viewModel.loadOneNewJoke(needJokeId);
-        } else if (needJokesCnt > 1) {
-            viewModel.loadListOfJokes(needJokesCnt);
+
+        if (generatingRules.getJokesCntAction() == JokesCnt.ONE_JOKE) {
+            if (generatingRules.getChooseIdAction() == ChooseId.RANDOM_ID) {
+                viewModel.loadOneNewJoke(generatingRules.getId());
+            } else if (generatingRules.getChooseIdAction() == ChooseId.SET_ID) {
+                viewModel.loadOneNewJoke(generatingRules.getId());
+            }
+        } else if (generatingRules.getJokesCntAction() == JokesCnt.LIST_OF_JOKES) {
+            if (generatingRules.getJokesCntValue() == 1) {
+                viewModel.loadOneNewJoke(RulesForGeneratingJokes.RANDOM_JOKE);
+            } else if (generatingRules.getJokesCntValue() > 1) {
+                viewModel.loadListOfJokes(generatingRules.getJokesCntValue());
+            }
         }
+
         viewModel.getJokeItem().observe(this, new Observer<JokeItemInfo>() {
             @Override
             public void onChanged(JokeItemInfo jokeItem) {
                 Log.d(LOG_TAG, jokeItem.toString());
+
                 tvJokeTypeText.setText(jokeItem.getType());
                 tvOneJokeSetup.setText(jokeItem.getSetup());
                 tvOneJokePunchline.setText(jokeItem.getPunchline());
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 oneJokeLikeBtn.setVisibility(View.VISIBLE);
 
                 rvJokesListBox.setVisibility(View.GONE);
+
                 llOneJokeBox.setVisibility(View.VISIBLE);
             }
         });
@@ -110,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
                     llOneJokeBox.setVisibility(View.GONE);
                 } else {
                     loadingProgressBarBox.setVisibility(View.GONE);
-                    if (needJokesCnt == 1) {
+                    if (generatingRules.getJokesCntValue() == 1) {
                         llOneJokeBox.setVisibility(View.VISIBLE);
                         rvJokesListBox.setVisibility(View.GONE);
-                    } else if (needJokesCnt > 1) {
+                    } else if (generatingRules.getJokesCntValue() > 1) {
                         llOneJokeBox.setVisibility(View.GONE);
                         rvJokesListBox.setVisibility(View.VISIBLE);
                     }
@@ -124,15 +134,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clownView = findViewById(R.id.clownView);
-                if (needJokesCnt == 1) {
+                if (generatingRules.getJokesCntAction() == JokesCnt.ONE_JOKE) {
                     clownView.setVisibility(View.GONE);
-                    viewModel.loadOneNewJoke(needJokeId);
-                    // после генерации по id стоит обнулить id
-                    // чтобы снова генерировалось рандомно
-                    needJokeId = RANDOM_JOKE;
-                } else if (needJokesCnt > 1) {
+                    if (generatingRules.getChooseIdAction() == ChooseId.RANDOM_ID) {
+                        viewModel.loadOneNewJoke(generatingRules.getId());
+                    } else if (generatingRules.getChooseIdAction() == ChooseId.SET_ID) {
+                        viewModel.loadOneNewJoke(generatingRules.getId());
+                    }
+                } else if (generatingRules.getJokesCntAction() == JokesCnt.LIST_OF_JOKES) {
                     clownView.setVisibility(View.GONE);
-                    viewModel.loadListOfJokes(needJokesCnt);
+                    if (generatingRules.getJokesCntValue() == 1) {
+                        viewModel.loadOneNewJoke(RulesForGeneratingJokes.RANDOM_JOKE);
+                    } else if (generatingRules.getJokesCntValue() > 1) {
+                        viewModel.loadListOfJokes(generatingRules.getJokesCntValue());
+                    }
                 } else {
                     ImageView imageViewGif = findViewById(R.id.clownViewImage);
 
@@ -158,21 +173,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkNeedJokesCnt() {
         if (rbOneJoke.isChecked()) {
-            needJokesCnt = 1;
-            if (rbRandomId.isChecked()){
-                needJokeId = RANDOM_JOKE;
+            generatingRules.setJokesCntAction(JokesCnt.ONE_JOKE);
+            if (rbRandomId.isChecked()) {
+                generatingRules.setChooseIdAction(ChooseId.RANDOM_ID);
             } else {
+                generatingRules.setChooseIdAction(ChooseId.SET_ID);
                 if (etNeedJokeIdInput != null &&
-                        !etNeedJokeIdInput.getText().toString().trim().isEmpty()){
-                    needJokeId = Integer.parseInt(etNeedJokeIdInput.getText().toString());
+                        !etNeedJokeIdInput.getText()
+                                .toString()
+                                .trim()
+                                .isEmpty()
+                ) {
+                    generatingRules.setId(
+                            Integer.parseInt(etNeedJokeIdInput.getText().toString())
+                    );
                 }
             }
         } else {
+            generatingRules.setJokesCntAction(JokesCnt.LIST_OF_JOKES);
             if (etNeedJokesCntInput != null &&
-                    !etNeedJokesCntInput.getText().toString().trim().isEmpty()){
-                needJokesCnt = Integer.parseInt(etNeedJokesCntInput.getText().toString());
+                    !etNeedJokesCntInput.getText()
+                            .toString()
+                            .trim()
+                            .isEmpty()
+            ) {
+                generatingRules.setJokesCntValue(
+                        Integer.parseInt(etNeedJokesCntInput.getText().toString())
+                );
             }
         }
+        Log.d(LOG_TAG, generatingRules.toString());
     }
 
     private void showChangeGenerateRulesDialog() {
@@ -181,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
                         R.layout.change_generate_rules_dialog,
                         null
                 );
+
+
         LinearLayout llChooseIdBox = changeGenerateRulesDialog.findViewById(R.id.llChooseIdBox);
         RadioGroup rgChooseId = changeGenerateRulesDialog.findViewById(R.id.rgChooseId);
         rbRandomId = changeGenerateRulesDialog.findViewById(R.id.rbRandomId);
@@ -188,7 +220,11 @@ public class MainActivity extends AppCompatActivity {
         etNeedJokeIdInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokeIdInput);
         TextView etNeedJokeIdInputWarningText = changeGenerateRulesDialog.findViewById(R.id.etNeedJokeIdInputWarningText);
 
-        etNeedJokeIdInput.addTextChangedListener(EditTextWatchers.getEtTextWatcher(etNeedJokeIdInputWarningText));
+        etNeedJokeIdInput.setFilters(
+                new InputFilter[]{
+                        EditTextListener.getEditTextFilter(etNeedJokeIdInputWarningText)
+                }
+        );
 
         RadioGroup rgChooseJokesCnt = changeGenerateRulesDialog.findViewById(R.id.rgChooseJokesCnt);
         rbOneJoke = changeGenerateRulesDialog.findViewById(R.id.rbOneJoke);
@@ -197,12 +233,17 @@ public class MainActivity extends AppCompatActivity {
         etNeedJokesCntInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokesCntInput);
         TextView etNeedJokesCntInputWarningText = changeGenerateRulesDialog.findViewById(R.id.etNeedJokesCntInputWarningText);
 
-        etNeedJokesCntInput.addTextChangedListener(EditTextWatchers.getEtTextWatcher(etNeedJokesCntInputWarningText));
+        etNeedJokesCntInput.setFilters(
+                new InputFilter[]{
+                        EditTextListener.getEditTextFilter(etNeedJokesCntInputWarningText)
+                }
+        );
 
         rgChooseJokesCnt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (rbOneJoke.isChecked()) {
+                    generatingRules.setJokesCntAction(JokesCnt.ONE_JOKE);
                     activateRadioButton(rbOneJoke);
                     deactivateRadioButton(rbListOfJokes);
 
@@ -214,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                     // показываем кнопки выбора id
                     llChooseIdBox.setVisibility(View.VISIBLE);
                 } else {
+                    generatingRules.setJokesCntAction(JokesCnt.LIST_OF_JOKES);
                     activateRadioButton(rbListOfJokes);
                     deactivateRadioButton(rbOneJoke);
 
@@ -231,12 +273,14 @@ public class MainActivity extends AppCompatActivity {
         rgChooseId.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (rbRandomId.isChecked()){
+                if (rbRandomId.isChecked()) {
+                    generatingRules.setChooseIdAction(ChooseId.RANDOM_ID);
                     etNeedJokeIdInput.setVisibility(View.GONE);
                     etNeedJokeIdInputWarningText.setVisibility(View.GONE);
                     activateRadioButton(rbRandomId);
                     deactivateRadioButton(rbSetId);
                 } else {
+                    generatingRules.setChooseIdAction(ChooseId.SET_ID);
                     etNeedJokeIdInput.setVisibility(View.VISIBLE);
                     etNeedJokeIdInputWarningText.setVisibility(View.VISIBLE);
                     activateRadioButton(rbSetId);
@@ -252,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         checkNeedJokesCnt();
-                        changeGenerateRulesBtnIndicator.setText(String.valueOf(needJokesCnt));
+                        changeGenerateRulesBtnIndicator.setText(String.valueOf(generatingRules.getJokesCntValue()));
                     }
                 })
                 .create()
@@ -265,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
         rb.setBackgroundResource(R.drawable.active_rb_bg);
         rb.setTextColor(active_rb_color);
     }
+
     private void deactivateRadioButton(RadioButton rb) {
         int inactive_rb_color = ContextCompat.getColor(this, R.color.inactive_rb_color);
         // деактивируем нужные стили для остальных радиобоксов
