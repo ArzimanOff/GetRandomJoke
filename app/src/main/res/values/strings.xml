@@ -10,8 +10,8 @@
     <string name="like_joke_button_text">Кнопка для лайка шутки</string>
     <string name="one_joke_load_error_text">Ошибка загрузки!</string>
     <string name="one_joke_try_load_later_text">Повторите позже</string>
-    <string name="clown_view_text_1">Серьёзно? \\n Хочешь сгенерировать 0 анекдотов?</string>
-    <string name="clown_view_text_2">Премия клоун года \\n достаётся тебе :)</string>
+    <string name="clown_view_text_1">Серьёзно? \n Хочешь сгенерировать 0 анекдотов?</string>
+    <string name="clown_view_text_2">Премия клоун года \n достаётся тебе :)</string>
     <string name="need_jokes_cnt_input_hint_text">Введите число</string>
     <string name="need_jokes_cnt_input_title_text">Сколько?</string>
     <string name="rb_list_of_jokes_text">Несколько</string>
@@ -20,4 +20,6 @@
     <string name="rg_choose_id_title_text">Id анекдота случайный?</string>
     <string name="id_input_hint_text">Введите id</string>
     <string name="etNeedJokeIdInputWarningText">Значение должно быть от 1 до 451</string>
+    <string name="rbSetIdText">Поиск по id</string>
+    <string name="rbRandomIdText">Случайный</string>
 </resources>

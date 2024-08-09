@@ -18,4 +18,9 @@
     <string name="rb_list_of_jokes_text">Several</string>
     <string name="rb_one_joke_text">One</string>
     <string name="rg_choose_jokes_cnt_title_text">How many jokes need to generate?</string>
+    <string name="rg_choose_id_title_text">Is the joke id random?</string>
+    <string name="id_input_hint_text">Enter the id</string>
+    <string name="etNeedJokeIdInputWarningText">The value must be between 1 and 451</string>
+    <string name="rbSetIdText">Search by id</string>
+    <string name="rbRandomIdText">Random</string>
 </resources>
