@@ -147,18 +147,18 @@ public class MainActivity extends AppCompatActivity {
                         viewModel.loadOneNewJoke(RulesForGeneratingJokes.RANDOM_JOKE);
                     } else if (generatingRules.getJokesCntValue() > 1) {
                         viewModel.loadListOfJokes(generatingRules.getJokesCntValue());
+                    } else {
+                        ImageView imageViewGif = findViewById(R.id.clownViewImage);
+
+                        Glide.with(getApplicationContext())
+                                .asGif()
+                                .load(R.drawable.monke_clown)
+                                .into(imageViewGif);
+                        clownView.setVisibility(View.VISIBLE);
+
+                        llOneJokeBox.setVisibility(View.GONE);
+                        rvJokesListBox.setVisibility(View.GONE);
                     }
-                } else {
-                    ImageView imageViewGif = findViewById(R.id.clownViewImage);
-
-                    Glide.with(getApplicationContext())
-                            .asGif()
-                            .load(R.drawable.monke_clown)
-                            .into(imageViewGif);
-                    clownView.setVisibility(View.VISIBLE);
-
-                    llOneJokeBox.setVisibility(View.GONE);
-                    rvJokesListBox.setVisibility(View.GONE);
                 }
             }
         });
