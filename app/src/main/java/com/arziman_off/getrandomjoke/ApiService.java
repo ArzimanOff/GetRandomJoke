@@ -9,6 +9,9 @@ import retrofit2.http.Path;
 public interface ApiService {
     @GET("random_joke")
     Single<JokeItemInfo> generateOneNewJoke();
+    @GET("jokes/{id}")
+    Single<JokeItemInfo> generateOnNewJokeById(@Path("id") int jokeId);
     @GET("jokes/random/{count}")
     Single<List<JokeItemInfo>> generateNewJokesList(@Path("count") int jokesCnt);
+
 }

@@ -54,6 +54,89 @@
             android:textStyle="normal"
             />
     </RadioGroup>
+
+<!-- Если выбран вариант id: rbOneJoke (Один) -->
+    <LinearLayout
+        android:id="@+id/llChooseIdBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rg_choose_id_title_text"
+        android:textColor="@color/text_main_color_dark"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="normal"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="8dp"
+        />
+        <RadioGroup
+            android:id="@+id/rgChooseId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+            <RadioButton
+                android:id="@+id/rbRandomId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/active_rb_bg"
+                android:button="@null"
+                android:checked="true"
+                android:text="Случайный"
+                android:textAlignment="center"
+                android:textColor="@color/main_color"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                />
+            <RadioButton
+                android:id="@+id/rbSetId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/inactive_rb_bg"
+                android:button="@null"
+                android:text="Поиск по id"
+                android:textAlignment="center"
+                android:textColor="@color/inactive_rb_color"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                />
+        </RadioGroup>
+        <EditText
+            android:id="@+id/etNeedJokeIdInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+
+            android:background="@drawable/need_jokes_cnt_edit_text_bg"
+
+            android:hint="@string/id_input_hint_text"
+            android:textColorHint="@color/inactive_rb_color"
+            android:inputType="number"
+            android:maxLength="500"
+            android:maxLines="10"
+            android:importantForAutofill="no"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+<!---->
+
+<!-- Если выбран вариант id: rbListOfJokes (Несколько) -->
     <TextView
         android:id="@+id/tvNeedJokesCntInputTitle"
         android:layout_width="wrap_content"
@@ -85,6 +168,7 @@
         android:importantForAutofill="no"
         android:visibility="gone"
         />
+<!---->
 
 
 </LinearLayout>

@@ -27,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static int needJokesCnt = 1;
+    private static final int RANDOM_JOKE = -1;
     private static final String LOG_TAG = "MainActivity";
+    public static int needJokesCnt = 1;
+    public static int needJokeId = RANDOM_JOKE;
     private RecyclerView rvJokesListBox;
     private JokesAdapter jokesAdapter;
     private ConstraintLayout llOneJokeBox;
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageView oneJokeLikeBtn;
     private RadioButton rbOneJoke;
     private RadioButton rbListOfJokes;
+    private RadioButton rbRandomId;
+    private RadioButton rbSetId;
+    private EditText etNeedJokeIdInput;
     private TextView tvNeedJokesCntInputTitle;
     private EditText etNeedJokesCntInput;
     private LinearLayout clownView;
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         changeGenerateRulesBtnIndicator.setText(String.valueOf(needJokesCnt));
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         if (needJokesCnt == 1) {
-            viewModel.loadOneNewJoke();
+            viewModel.loadOneNewJoke(needJokeId);
         } else if (needJokesCnt > 1) {
             viewModel.loadListOfJokes(needJokesCnt);
         }
@@ -121,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 clownView = findViewById(R.id.clownView);
                 if (needJokesCnt == 1) {
                     clownView.setVisibility(View.GONE);
-                    viewModel.loadOneNewJoke();
+                    viewModel.loadOneNewJoke(needJokeId);
+                    // после генерации по id стоит обнулить id
+                    // чтобы снова генерировалось рандомно
+                    needJokeId = RANDOM_JOKE;
                 } else if (needJokesCnt > 1) {
                     clownView.setVisibility(View.GONE);
                     viewModel.loadListOfJokes(needJokesCnt);
@@ -151,6 +159,14 @@ public class MainActivity extends AppCompatActivity {
     private void checkNeedJokesCnt() {
         if (rbOneJoke.isChecked()) {
             needJokesCnt = 1;
+            if (rbRandomId.isChecked()){
+                needJokeId = RANDOM_JOKE;
+            } else {
+                if (etNeedJokeIdInput != null &&
+                        !etNeedJokeIdInput.getText().toString().trim().isEmpty()){
+                    needJokeId = Integer.parseInt(etNeedJokeIdInput.getText().toString());
+                }
+            }
         } else {
             if (etNeedJokesCntInput != null &&
                     !etNeedJokesCntInput.getText().toString().trim().isEmpty()){
@@ -167,11 +183,18 @@ public class MainActivity extends AppCompatActivity {
                         R.layout.change_generate_rules_dialog,
                         null
                 );
+        LinearLayout llChooseIdBox = changeGenerateRulesDialog.findViewById(R.id.llChooseIdBox);
+        RadioGroup rgChooseId = changeGenerateRulesDialog.findViewById(R.id.rgChooseId);
+        rbRandomId = changeGenerateRulesDialog.findViewById(R.id.rbRandomId);
+        rbSetId = changeGenerateRulesDialog.findViewById(R.id.rbSetId);
+        etNeedJokeIdInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokeIdInput);
+
         RadioGroup rgChooseJokesCnt = changeGenerateRulesDialog.findViewById(R.id.rgChooseJokesCnt);
         rbOneJoke = changeGenerateRulesDialog.findViewById(R.id.rbOneJoke);
         rbListOfJokes = changeGenerateRulesDialog.findViewById(R.id.rbListOfJokes);
         tvNeedJokesCntInputTitle = changeGenerateRulesDialog.findViewById(R.id.tvNeedJokesCntInputTitle);
         etNeedJokesCntInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokesCntInput);
+
         rgChooseJokesCnt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -186,6 +209,9 @@ public class MainActivity extends AppCompatActivity {
                     // убираем поле ввода кол-ва шуток
                     tvNeedJokesCntInputTitle.setVisibility(View.GONE);
                     etNeedJokesCntInput.setVisibility(View.GONE);
+
+                    // показываем кнопки выбора id
+                    llChooseIdBox.setVisibility(View.VISIBLE);
                 } else {
                     // активируем нужные стили для текущего радиобокса
                     rbListOfJokes.setBackgroundResource(R.drawable.active_rb_bg);
@@ -194,9 +220,35 @@ public class MainActivity extends AppCompatActivity {
                     rbOneJoke.setBackgroundResource(R.drawable.inactive_rb_bg);
                     rbOneJoke.setTextColor(inactive_rb_color);
 
+                    // скрываем кнопки выбора id
+                    llChooseIdBox.setVisibility(View.GONE);
+
                     // показываем поле ввода кол-ва шуток
                     tvNeedJokesCntInputTitle.setVisibility(View.VISIBLE);
                     etNeedJokesCntInput.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        rgChooseId.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (rbRandomId.isChecked()){
+                    etNeedJokeIdInput.setVisibility(View.GONE);
+                    // активируем нужные стили для текущего радиобокса
+                    rbRandomId.setBackgroundResource(R.drawable.active_rb_bg);
+                    rbRandomId.setTextColor(active_rb_color);
+                    // деактивируем нужные стили для остальных радиобоксов
+                    rbSetId.setBackgroundResource(R.drawable.inactive_rb_bg);
+                    rbSetId.setTextColor(inactive_rb_color);
+                } else {
+                    etNeedJokeIdInput.setVisibility(View.VISIBLE);
+                    // активируем нужные стили для текущего радиобокса
+                    rbSetId.setBackgroundResource(R.drawable.active_rb_bg);
+                    rbSetId.setTextColor(active_rb_color);
+                    // деактивируем нужные стили для остальных радиобоксов
+                    rbRandomId.setBackgroundResource(R.drawable.inactive_rb_bg);
+                    rbRandomId.setTextColor(inactive_rb_color);
                 }
             }
         });

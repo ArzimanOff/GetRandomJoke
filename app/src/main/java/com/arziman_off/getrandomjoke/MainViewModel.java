@@ -55,8 +55,8 @@ public class MainViewModel extends AndroidViewModel{
         return isLoadingError;
     }
 
-    public void loadOneNewJoke(){
-        Disposable disposable = loadOneNewJokeRx()
+    public void loadOneNewJoke(int id){
+        Disposable disposable = loadOneNewJokeRx(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -138,10 +138,16 @@ public class MainViewModel extends AndroidViewModel{
         compositeDisposable.add(disposable);
     }
 
-    private Single<JokeItemInfo> loadOneNewJokeRx(){
-        return ApiFactory
-                .getApiService()
-                .generateOneNewJoke();
+    private Single<JokeItemInfo> loadOneNewJokeRx(int id){
+        if (id < 0){
+            return ApiFactory
+                    .getApiService()
+                    .generateOneNewJoke();
+        } else {
+            return ApiFactory
+                    .getApiService()
+                    .generateOnNewJokeById(id);
+        }
     }
 
     private Single<List<JokeItemInfo>> loadNewJokesListRx(int needJokesCnt){

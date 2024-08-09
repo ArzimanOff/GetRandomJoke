@@ -3,7 +3,7 @@
     <string name="btnNewGenerateText">Сгенерировать</string>
     <string name="loadingErrorHintText1">Загрузка…</string>
     <string name="loadingErrorHintText2">Пожалуйста подождите</string>
-    <string name="internet_error_toast_text">Ошибка загрузки! \nПроверьте подключение к интернету!</string>
+    <string name="internet_error_toast_text">Ошибка загрузки! \\nПроверьте подключение к интернету!</string>
     <string name="change_generate_rules_button_text">Кнопка для изменения правил генерации шуток</string>
     <string name="loadingProgressBarText1">Загрузка…</string>
     <string name="loadingProgressBarText2">Пожалуйста, подождите :)</string>
@@ -17,4 +17,6 @@
     <string name="rb_list_of_jokes_text">Несколько</string>
     <string name="rb_one_joke_text">Один</string>
     <string name="rg_choose_jokes_cnt_title_text">Сколько анекдотов сгенерировать?</string>
+    <string name="rg_choose_id_title_text">Id анекдота случайный?</string>
+    <string name="id_input_hint_text">Введите id</string>
 </resources>
