@@ -19,4 +19,5 @@
     <string name="rg_choose_jokes_cnt_title_text">Сколько анекдотов сгенерировать?</string>
     <string name="rg_choose_id_title_text">Id анекдота случайный?</string>
     <string name="id_input_hint_text">Введите id</string>
+    <string name="etNeedJokeIdInputWarningText">Значение должно быть от 1 до 451</string>
 </resources>

@@ -176,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showChangeGenerateRulesDialog() {
-        int active_rb_color = ContextCompat.getColor(this, R.color.main_color);
-        int inactive_rb_color = ContextCompat.getColor(this, R.color.inactive_rb_color);
         View changeGenerateRulesDialog = getLayoutInflater()
                 .inflate(
                         R.layout.change_generate_rules_dialog,
@@ -188,37 +186,36 @@ public class MainActivity extends AppCompatActivity {
         rbRandomId = changeGenerateRulesDialog.findViewById(R.id.rbRandomId);
         rbSetId = changeGenerateRulesDialog.findViewById(R.id.rbSetId);
         etNeedJokeIdInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokeIdInput);
+        TextView etNeedJokeIdInputWarningText = changeGenerateRulesDialog.findViewById(R.id.etNeedJokeIdInputWarningText);
+
+        etNeedJokeIdInput.addTextChangedListener(EditTextWatchers.getEtTextWatcher(etNeedJokeIdInputWarningText));
 
         RadioGroup rgChooseJokesCnt = changeGenerateRulesDialog.findViewById(R.id.rgChooseJokesCnt);
         rbOneJoke = changeGenerateRulesDialog.findViewById(R.id.rbOneJoke);
         rbListOfJokes = changeGenerateRulesDialog.findViewById(R.id.rbListOfJokes);
         tvNeedJokesCntInputTitle = changeGenerateRulesDialog.findViewById(R.id.tvNeedJokesCntInputTitle);
         etNeedJokesCntInput = changeGenerateRulesDialog.findViewById(R.id.etNeedJokesCntInput);
+        TextView etNeedJokesCntInputWarningText = changeGenerateRulesDialog.findViewById(R.id.etNeedJokesCntInputWarningText);
+
+        etNeedJokesCntInput.addTextChangedListener(EditTextWatchers.getEtTextWatcher(etNeedJokesCntInputWarningText));
 
         rgChooseJokesCnt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (rbOneJoke.isChecked()) {
-                    // активируем нужные стили для текущего радиобокса
-                    rbOneJoke.setBackgroundResource(R.drawable.active_rb_bg);
-                    rbOneJoke.setTextColor(active_rb_color);
-                    // деактивируем нужные стили для остальных радиобоксов
-                    rbListOfJokes.setBackgroundResource(R.drawable.inactive_rb_bg);
-                    rbListOfJokes.setTextColor(inactive_rb_color);
+                    activateRadioButton(rbOneJoke);
+                    deactivateRadioButton(rbListOfJokes);
 
                     // убираем поле ввода кол-ва шуток
                     tvNeedJokesCntInputTitle.setVisibility(View.GONE);
                     etNeedJokesCntInput.setVisibility(View.GONE);
+                    etNeedJokesCntInputWarningText.setVisibility(View.GONE);
 
                     // показываем кнопки выбора id
                     llChooseIdBox.setVisibility(View.VISIBLE);
                 } else {
-                    // активируем нужные стили для текущего радиобокса
-                    rbListOfJokes.setBackgroundResource(R.drawable.active_rb_bg);
-                    rbListOfJokes.setTextColor(active_rb_color);
-                    // деактивируем нужные стили для остальных радиобоксов
-                    rbOneJoke.setBackgroundResource(R.drawable.inactive_rb_bg);
-                    rbOneJoke.setTextColor(inactive_rb_color);
+                    activateRadioButton(rbListOfJokes);
+                    deactivateRadioButton(rbOneJoke);
 
                     // скрываем кнопки выбора id
                     llChooseIdBox.setVisibility(View.GONE);
@@ -226,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     // показываем поле ввода кол-ва шуток
                     tvNeedJokesCntInputTitle.setVisibility(View.VISIBLE);
                     etNeedJokesCntInput.setVisibility(View.VISIBLE);
+                    etNeedJokesCntInputWarningText.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -235,20 +233,14 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (rbRandomId.isChecked()){
                     etNeedJokeIdInput.setVisibility(View.GONE);
-                    // активируем нужные стили для текущего радиобокса
-                    rbRandomId.setBackgroundResource(R.drawable.active_rb_bg);
-                    rbRandomId.setTextColor(active_rb_color);
-                    // деактивируем нужные стили для остальных радиобоксов
-                    rbSetId.setBackgroundResource(R.drawable.inactive_rb_bg);
-                    rbSetId.setTextColor(inactive_rb_color);
+                    etNeedJokeIdInputWarningText.setVisibility(View.GONE);
+                    activateRadioButton(rbRandomId);
+                    deactivateRadioButton(rbSetId);
                 } else {
                     etNeedJokeIdInput.setVisibility(View.VISIBLE);
-                    // активируем нужные стили для текущего радиобокса
-                    rbSetId.setBackgroundResource(R.drawable.active_rb_bg);
-                    rbSetId.setTextColor(active_rb_color);
-                    // деактивируем нужные стили для остальных радиобоксов
-                    rbRandomId.setBackgroundResource(R.drawable.inactive_rb_bg);
-                    rbRandomId.setTextColor(inactive_rb_color);
+                    etNeedJokeIdInputWarningText.setVisibility(View.VISIBLE);
+                    activateRadioButton(rbSetId);
+                    deactivateRadioButton(rbRandomId);
                 }
             }
         });
@@ -266,6 +258,20 @@ public class MainActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
+    private void activateRadioButton(RadioButton rb) {
+        int active_rb_color = ContextCompat.getColor(this, R.color.main_color);
+        // активируем нужные стили для текущего радиобокса
+        rb.setBackgroundResource(R.drawable.active_rb_bg);
+        rb.setTextColor(active_rb_color);
+    }
+    private void deactivateRadioButton(RadioButton rb) {
+        int inactive_rb_color = ContextCompat.getColor(this, R.color.inactive_rb_color);
+        // деактивируем нужные стили для остальных радиобоксов
+        rb.setBackgroundResource(R.drawable.inactive_rb_bg);
+        rb.setTextColor(inactive_rb_color);
+    }
+
 
     private void initMainViews() {
         loadingProgressBarBox = findViewById(R.id.loadingProgressBarBox);
