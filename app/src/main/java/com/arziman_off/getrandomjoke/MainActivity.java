@@ -19,19 +19,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static int needJokesCnt = 1;
     private static final String LOG_TAG = "MainActivity";
-    private ScrollView svJokesListBox;
+    private RecyclerView rvJokesListBox;
+    private JokesAdapter jokesAdapter;
     private LinearLayout llOneJokeBox;
-    private LinearLayout jokesList;
     private LinearLayout loadingProgressBarBox;
     private MainViewModel viewModel;
     private MaterialButton btnNewGenerate;
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvOneJokeSetup;
     private TextView tvOneJokePunchline;
     private TextView tvJokeIdText;
-    private RadioGroup rgChooseJokesCnt;
     private RadioButton rbOneJoke;
     private RadioButton rbListOfJokes;
     private TextView tvNeedJokesCntInputTitle;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initMainViews();
+
+        jokesAdapter = new JokesAdapter();
+        rvJokesListBox.setAdapter(jokesAdapter);
+
         changeGenerateRulesBtnIndicator.setText(String.valueOf(needJokesCnt));
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         if (needJokesCnt == 1) {
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 tvOneJokePunchline.setText(jokeItem.getPunchline());
                 tvJokeIdText.setText("id: " + jokeItem.getId().toString());
 
-                svJokesListBox.setVisibility(View.GONE);
+                rvJokesListBox.setVisibility(View.GONE);
                 llOneJokeBox.setVisibility(View.VISIBLE);
             }
         });
@@ -95,16 +100,16 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean isNowLoading) {
                 if (isNowLoading) {
                     loadingProgressBarBox.setVisibility(View.VISIBLE);
-                    svJokesListBox.setVisibility(View.GONE);
+                    rvJokesListBox.setVisibility(View.GONE);
                     llOneJokeBox.setVisibility(View.GONE);
                 } else {
                     loadingProgressBarBox.setVisibility(View.GONE);
                     if (needJokesCnt == 1) {
                         llOneJokeBox.setVisibility(View.VISIBLE);
-                        svJokesListBox.setVisibility(View.GONE);
+                        rvJokesListBox.setVisibility(View.GONE);
                     } else if (needJokesCnt > 1) {
                         llOneJokeBox.setVisibility(View.GONE);
-                        svJokesListBox.setVisibility(View.VISIBLE);
+                        rvJokesListBox.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -118,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                     viewModel.loadOneNewJoke();
                 } else if (needJokesCnt > 1) {
                     clownView.setVisibility(View.GONE);
-                    jokesList.removeAllViews();
                     viewModel.loadListOfJokes(needJokesCnt);
                 } else {
                     ImageView imageViewGif = findViewById(R.id.clownViewImage);
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     clownView.setVisibility(View.VISIBLE);
 
                     llOneJokeBox.setVisibility(View.GONE);
-                    svJokesListBox.setVisibility(View.GONE);
+                    rvJokesListBox.setVisibility(View.GONE);
                 }
             }
         });
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         R.layout.change_generate_rules_dialog,
                         null
                 );
-        rgChooseJokesCnt = changeGenerateRulesDialog.findViewById(R.id.rgChooseJokesCnt);
+        RadioGroup rgChooseJokesCnt = changeGenerateRulesDialog.findViewById(R.id.rgChooseJokesCnt);
         rbOneJoke = changeGenerateRulesDialog.findViewById(R.id.rbOneJoke);
         rbListOfJokes = changeGenerateRulesDialog.findViewById(R.id.rbListOfJokes);
         tvNeedJokesCntInputTitle = changeGenerateRulesDialog.findViewById(R.id.tvNeedJokesCntInputTitle);
@@ -213,9 +217,8 @@ public class MainActivity extends AppCompatActivity {
     private void initMainViews() {
         loadingProgressBarBox = findViewById(R.id.loadingProgressBarBox);
 
-        svJokesListBox = findViewById(R.id.svJokesListBox);
+        rvJokesListBox = findViewById(R.id.rvJokesListBox);
         llOneJokeBox = findViewById(R.id.llOneJokeBox);
-        jokesList = findViewById(R.id.jokesList);
 
         btnNewGenerate = findViewById(R.id.btnNewGenerate);
         btnChangeGenerateRules = findViewById(R.id.btnChangeGenerateRules);
@@ -228,27 +231,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showJokes(List<JokeItemInfo> jokes) {
-        for (JokeItemInfo jokeItem : jokes) {
-            Log.d(LOG_TAG, jokeItem.toString());
-            View jokeView = getLayoutInflater()
-                    .inflate(
-                            R.layout.joke_item_view,
-                            jokesList,
-                            false
-                    );
-            initJokeViewItems(jokeView, jokeItem);
-            jokesList.addView(jokeView);
-        }
-    }
-
-    private void initJokeViewItems(View jokeView, JokeItemInfo jokeItem) {
-        TextView tvJokeType = jokeView.findViewById(R.id.tvJokeTypeText);
-        TextView tvJokeSetup = jokeView.findViewById(R.id.tvJokeSetup);
-        TextView tvJokePunchline = jokeView.findViewById(R.id.tvJokePunchline);
-        TextView tvJokeId = jokeView.findViewById(R.id.tvJokeIdText);
-        tvJokeType.setText(jokeItem.getType());
-        tvJokeSetup.setText(jokeItem.getSetup());
-        tvJokePunchline.setText(jokeItem.getPunchline());
-        tvJokeId.setText("id: " + jokeItem.getId().toString());
+        jokesAdapter.setJokes((ArrayList<JokeItemInfo>) jokes);
     }
 }
