@@ -7,44 +7,103 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tool_bar_bg"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            >
+
+            <!-- Левая иконка -->
+            <ImageView
+                android:id="@+id/left_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/active_like_icon"
+                android:contentDescription="Left Icon"
+                android:layout_gravity="start"
+                android:padding="8dp" />
+
+            <!-- Текст по центру -->
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Random Joke"
+                android:textColor="@color/text_main_color_dark"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Правая иконка -->
+            <ImageView
+                android:id="@+id/right_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/inactive_like_icon"
+                android:contentDescription="Right Icon"
+                android:layout_gravity="end"
+                android:padding="8dp"
+                android:layout_marginHorizontal="16dp"
+                />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llOneJokeBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-
         android:layout_marginHorizontal="24dp"
 
         android:background="@drawable/main_view_one_joke_bg"
 
+        android:gravity="center"
+
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btnNewGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
         android:visibility="gone"
         tools:visibility="visible">
+
         <TextView
             android:id="@+id/tvJokeTypeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_view_one_joke_details_bg"
             android:minWidth="55dp"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="4dp"
-            android:layout_marginTop="24dp"
 
+            android:paddingVertical="4dp"
             android:text=""
-            android:textColor="@color/main_color"
             android:textAlignment="textStart"
+            android:textColor="@color/main_color"
             android:textSize="16sp"
+
             android:textStyle="normal"
 
-            android:background="@drawable/main_view_one_joke_details_bg"
-
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tvJokeSetup"
             android:layout_width="match_parent"
@@ -53,26 +112,26 @@
             android:layout_marginVertical="4dp"
 
             android:text="@string/one_joke_load_error_text"
-            android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
+            android:textColor="@color/text_main_color_dark"
             android:textSize="32sp"
             android:textStyle="bold"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText" />
+
         <View
             android:id="@+id/separator"
             android:layout_width="50dp"
             android:layout_height="2dp"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="2dp"
             android:background="@color/separator_color"
-            android:layout_marginHorizontal="16dp"
 
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvJokeSetup"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvJokeSetup" />
+
         <TextView
             android:id="@+id/tvJokePunchline"
             android:layout_width="match_parent"
@@ -81,114 +140,116 @@
             android:layout_marginVertical="5dp"
 
             android:text="@string/one_joke_try_load_later_text"
-            android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
+            android:textColor="@color/text_main_color_dark"
             android:textSize="24sp"
             android:textStyle="normal"
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator"
             app:layout_constraintBottom_toTopOf="@id/tvJokeIdText"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
+
         <TextView
             android:id="@+id/tvJokeIdText"
             android:layout_width="wrap_content"
-            android:minWidth="55dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/main_view_one_joke_details_bg"
+            android:minWidth="55dp"
             android:paddingHorizontal="16dp"
             android:paddingVertical="4dp"
-            android:layout_marginBottom="24dp"
             android:text=""
-            android:textColor="@color/main_color"
             android:textAlignment="center"
+            android:textColor="@color/main_color"
             android:textSize="16sp"
+
             android:textStyle="normal"
 
-            android:background="@drawable/main_view_one_joke_details_bg"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvJokePunchline"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvJokePunchline" />
+
         <ImageView
             android:id="@+id/oneJokeLikeBtn"
             android:layout_width="wrap_content"
-            android:minWidth="60dp"
-            android:maxWidth="100dp"
             android:layout_height="match_parent"
-            android:maxHeight="100dp"
             android:contentDescription="@string/like_joke_button_text"
-            android:src="@drawable/inactive_like_icon"
+            android:maxWidth="100dp"
+            android:maxHeight="100dp"
+            android:minWidth="60dp"
             android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/inactive_like_icon"
             android:visibility="gone"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJokesListBox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/btnNewGenerate"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:padding="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:visibility="gone"
-        tools:listitem="@layout/joke_item_view"
-        >
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/joke_item_view">
+
+
     </androidx.recyclerview.widget.RecyclerView>
+
     <LinearLayout
         android:id="@+id/loadingProgressBarBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnNewGenerate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible"
-        tools:visibility="gone"
-        >
+        app:layout_constraintBottom_toTopOf="@id/btnNewGenerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/loadingProgressBarText1"
-            android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
+            android:textColor="@color/text_main_color_dark"
             android:textSize="32sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:padding="24dp"
             android:layout_margin="16dp"
             android:background="@drawable/progress_bar_bg"
-            />
+            android:padding="24dp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/loadingProgressBarText2"
-            android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
+            android:textColor="@color/text_main_color_dark"
             android:textSize="24sp"
-            android:textStyle="normal"
-            />
+            android:textStyle="normal" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/clownView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
         android:gravity="center_vertical"
-        >
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,18 +257,20 @@
             android:layout_marginVertical="4dp"
 
             android:text="@string/clown_view_text_1"
-            android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
+            android:textColor="@color/text_main_color_dark"
             android:textSize="32sp"
             android:textStyle="bold"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText" />
+
         <ImageView
             android:id="@+id/clownViewImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/clown_text" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -215,65 +278,64 @@
             android:layout_marginVertical="4dp"
 
             android:text="@string/clown_view_text_2"
-            android:textColor="@color/text_main_color_dark"
             android:textAlignment="center"
+            android:textColor="@color/text_main_color_dark"
             android:textSize="24sp"
             android:textStyle="bold"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tvJokeTypeText" />
     </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNewGenerate"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        app:cornerRadius="16dp"
-        android:backgroundTint="@color/main_color"
+        android:layout_margin="16dp"
         android:layout_marginTop="36dp"
+        android:backgroundTint="@color/main_color"
 
         android:text="@string/btnNewGenerateText"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="normal"
-        android:textColor="@color/white"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnChangeGenerateRules"
-        android:layout_margin="16dp"
-
+        app:cornerRadius="16dp"
         app:icon="@android:drawable/stat_notify_sync"
-        app:iconTint="@color/white"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
+
         app:iconSize="30dp"
-        />
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btnChangeGenerateRules" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btnChangeGenerateRules"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/main_view_one_joke_bg"
+        android:layout_margin="16dp"
 
+        android:layout_marginTop="36dp"
+        android:background="@drawable/main_view_one_joke_bg"
+        android:contentDescription="@string/change_generate_rules_button_text"
         android:text="@string/btnNewGenerateText"
+
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="normal"
-        android:textColor="@color/white"
-
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="16dp"
-        android:layout_marginTop="36dp"
-        android:contentDescription="@string/change_generate_rules_button_text"
-        >
+        app:layout_constraintRight_toRightOf="parent">
 
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
+            android:layout_marginStart="14dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginStart="14dp"
             android:layout_marginBottom="14dp"
             android:background="@drawable/settings_icon"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -285,12 +347,12 @@
             android:id="@+id/changeGenerateRulesBtnIndicator"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:minWidth="32dp"
             android:background="@drawable/indicator"
-            android:text=""
-            android:textColor="@color/white"
+            android:minWidth="32dp"
             android:padding="8dp"
+            android:text=""
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -29,7 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
-    private RulesForGeneratingJokes generatingRules = RulesForGeneratingJokes.getInstance();
+    private final RulesForGeneratingJokes generatingRules = RulesForGeneratingJokes.getInstance();
     private RecyclerView rvJokesListBox;
     private JokesAdapter jokesAdapter;
     private ConstraintLayout llOneJokeBox;
