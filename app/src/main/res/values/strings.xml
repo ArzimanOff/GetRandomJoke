@@ -22,5 +22,9 @@
     <string name="etNeedJokeIdInputWarningText">Значение должно быть от 1 до 451</string>
     <string name="rbSetIdText">Поиск по id</string>
     <string name="rbRandomIdText">Случайный</string>
-    <string name="clown_text">clown</string>
+    <string name="clown_text" translatable="false">clown</string>
+    <string name="toolbar_logo_text">Иконка приложения с клоуном</string>
+    <string name="favorites_list_icon_text">favorites list</string>
+    <string name="get_random_joke_text">Get Random Joke</string>
+    <string name="go_back_btn_text">Вернуться назад</string>
 </resources>

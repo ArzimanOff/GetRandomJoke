@@ -7,6 +7,7 @@
     <color name="medium_main_color">#CC3C95E6</color>
     <color name="text_main_color_dark">#225897</color>
     <color name="separator_color">#663C95E6</color>
+    <color name="icon_color">#C5E1FB</color>
     <color name="inactive_rb_color">#A3A1A1A1</color>
     <color name="warning_color">#CCFB4646</color>
 </resources>
