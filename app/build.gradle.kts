@@ -34,8 +34,15 @@ android {
 }
 
 dependencies {
+    var room_version = "2.6.1"
+
+    implementation ("androidx.room:room-runtime:$room_version")
+    annotationProcessor ("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-rxjava3:$room_version")
+
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.adapterRxjava3)
