@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "jokeItems")
+@Entity(tableName = "likedJokes")
 public class JokeItemInfo {
 
     @PrimaryKey(autoGenerate = false)
@@ -20,6 +20,30 @@ public class JokeItemInfo {
         this.punchline = punchline;
         this.id = id;
         this.isLiked = false;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setSetup(String setup) {
+        this.setup = setup;
+    }
+
+    public void setPunchline(String punchline) {
+        this.punchline = punchline;
+    }
+
+    public Boolean getLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(Boolean liked) {
+        isLiked = liked;
     }
 
     public String getType() {

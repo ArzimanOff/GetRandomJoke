@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FavoriteJokesActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/favoriteJokesActivityAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tool_bar_bg"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            >
+
+            <ImageView
+                android:id="@+id/goBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/go_back_icon"
+                android:contentDescription="@string/go_back_btn_text"
+                android:layout_gravity="start"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/favorite_jokes_toolbar_text"
+                android:textColor="@color/text_main_color_dark"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium" />
+
+            <ImageView
+                android:id="@+id/toolbarLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clown_icon"
+                android:contentDescription="@string/toolbar_logo_text"
+                android:layout_gravity="end"
+                android:padding="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:visibility="visible"
+                tools:visibility="visible"
+                />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_favorite_jokes_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/add_my_joke_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favoriteJokesActivityAppBar"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Упс, похоже твой список избранных анекдотов пуст! :("
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@color/main_color"
+            />
+
+        <ImageView
+            android:id="@+id/centerImageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/clown_icon"
+            android:layout_margin="16dp"
+            />
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Скорее исправь это!"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/main_color"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/placeholder_go_back_btn"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:text="Вернуться к генерации"
+            app:cornerRadius="16dp"
+            android:backgroundTint="@color/light_main_color"
+            android:layout_marginTop="36dp"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            android:textColor="@color/main_color"
+
+            app:icon="@drawable/go_back_icon"
+            app:iconTint="@color/main_color"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconSize="0dp"
+            />
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_my_joke_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Добавить свой"
+        app:cornerRadius="16dp"
+        android:backgroundTint="@color/main_color"
+        android:layout_marginTop="36dp"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:textColor="@color/white"
+
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="@color/white"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconSize="0dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="16dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

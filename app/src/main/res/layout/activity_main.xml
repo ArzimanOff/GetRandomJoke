@@ -36,7 +36,7 @@
                 android:contentDescription="@string/go_back_btn_text"
                 android:layout_gravity="start"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="gone" />
 
             <ImageView
                 android:id="@+id/toolbarLogo"
@@ -47,7 +47,7 @@
                 android:layout_gravity="start"
                 android:padding="8dp"
                 android:visibility="visible"
-                tools:visibility="gone"
+                tools:visibility="visible"
                 />
 
             <TextView

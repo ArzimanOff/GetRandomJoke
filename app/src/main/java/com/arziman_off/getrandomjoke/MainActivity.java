@@ -1,6 +1,7 @@
 package com.arziman_off.getrandomjoke;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etNeedJokesCntInput;
     private LinearLayout clownView;
     private TextView changeGenerateRulesBtnIndicator;
+    private ImageView btnOpenFavoriteJokes;
+    private ImageView toolbarLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +170,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showChangeGenerateRulesDialog();
                 checkNeedJokesCnt();
+            }
+        });
+
+        btnOpenFavoriteJokes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = FavoriteJokesActivity.newIntent(MainActivity.this);
+                startActivity(intent);
             }
         });
     }
@@ -334,6 +345,9 @@ public class MainActivity extends AppCompatActivity {
         oneJokeLikeBtn = findViewById(R.id.oneJokeLikeBtn);
 
         changeGenerateRulesBtnIndicator = findViewById(R.id.changeGenerateRulesBtnIndicator);
+
+        btnOpenFavoriteJokes = findViewById(R.id.favorites_list_btn);
+        toolbarLogo = findViewById(R.id.toolbarLogo);
     }
 
     private void showJokes(List<JokeItemInfo> jokes) {

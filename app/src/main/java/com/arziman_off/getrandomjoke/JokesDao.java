@@ -9,12 +9,12 @@ import java.util.List;
 
 @Dao
 public interface JokesDao {
-    @Query("SELECT * FROM jokeItems")
-    List<JokeItemInfo> getJokes();
+    @Query("SELECT * FROM likedJokes")
+    List<JokeItemInfo> getLikedJokes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void add(JokeItemInfo jokeItem);
+    void add(JokeItemInfo likedJokeItem);
 
-    @Query("DELETE FROM jokeItems WHERE id = :id")
+    @Query("DELETE FROM likedJokes WHERE id = :id")
     void remove(int id);
 }

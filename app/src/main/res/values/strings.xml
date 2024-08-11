@@ -27,4 +27,5 @@
     <string name="favorites_list_icon_text">favorites list</string>
     <string name="get_random_joke_text">Get Random Joke</string>
     <string name="go_back_btn_text">Вернуться назад</string>
+    <string name="favorite_jokes_toolbar_text">Избранные анекдоты</string>
 </resources>
