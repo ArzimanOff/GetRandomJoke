@@ -107,12 +107,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/placeholder_go_back_btn"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:text="Вернуться к генерации"
             app:cornerRadius="16dp"
             android:backgroundTint="@color/light_main_color"
             android:layout_marginTop="36dp"
+            android:layout_marginHorizontal="16dp"
             android:textSize="18sp"
             android:textStyle="normal"
             android:textColor="@color/main_color"
